@@ -15,6 +15,7 @@ class Chip8 {
         uint8_t delayTimer{}; // Decrements at 60Hz
         uint8_t soundTimer{}; // Decrements at 60Hz, buzzes when non-zero
         uint8_t registers[16]{}; // v0-vF
+        size_t keys[16]{}; // Chip 8's input keys: 1 - 0xF 
 
         /* Constants */
         int const START_ADDRESS = 0x200; // Load ROM from this address onwards (512 in base 10)
@@ -102,6 +103,7 @@ void Chip8::updateTimers() {
         delayTimer--;
     }
 }
+
 
 int main() {
     cout << "Starting" << endl;
