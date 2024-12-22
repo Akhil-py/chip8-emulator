@@ -63,6 +63,7 @@ int main(int argc, char *argv[])
 
 	display[5 * WIDTH + 10] = 0xFFFFFFFF; // Pixel at (10, 5)
     display[15 * WIDTH + 20] = 0xFFFFFFFF; // Pixel at (20, 15)
+	display[31 * WIDTH + 63] = 0xFFFFFFFF; // Pixel at (63, 31)
 
 	window.update(display);
 

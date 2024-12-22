@@ -20,9 +20,10 @@ class Chip8 {
         int const START_ADDRESS = 0x200; // Load ROM from this address onwards (512 in base 10)
         int const FONT_ADDRESS = 0X50; // Load Fonts at this address
 
-        /* Initializations */
+        /* Initializations and utility functions*/
         void loadRom(string ROM);
         void loadFonts();
+        void updateTimers();
 
         /* OP Codes */
 };
@@ -93,6 +94,14 @@ void Chip8::loadFonts() {
     }
 }
 
+void Chip8::updateTimers() {
+    if (soundTimer > 0) {
+        soundTimer--;
+    }
+    if (delayTimer > 0) {
+        delayTimer--;
+    }
+}
 
 int main() {
     cout << "Starting" << endl;
