@@ -10,6 +10,7 @@ Graphics, sound, and key inputs are processed using SDL2.
 ![Chip-8 to Interpretter Layout](keypad.png)
 
 ## Memory Map
+```
 +---------------+= 0xFFF (4095) End of Chip-8 RAM
 |               |
 |               |
@@ -32,7 +33,7 @@ Graphics, sound, and key inputs are processed using SDL2.
 | Reserved for  |
 |  interpreter  |
 +---------------+= 0x000 (0) Start of Chip-8 RAM
-
+```
 
 ## Resources:
 - https://tobiasvl.github.io/blog/write-a-chip-8-emulator/ (Primary Source)
