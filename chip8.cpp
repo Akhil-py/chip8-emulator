@@ -19,15 +19,50 @@ class Chip8 {
 
         /* Constants */
         int const START_ADDRESS = 0x200; // Load ROM from this address onwards (512 in base 10)
-        int const FONT_ADDRESS = 0X50; // Load Fonts at this address
+        int const FONT_ADDRESS = 0x50; // Load Fonts at this address
 
-        /* Initializations and utility functions*/
+        /* Initializations and utility functions */
         void loadRom(string ROM);
         void loadFonts();
         void updateTimers();
         void cycle();
 
         /* OP Codes */
+        void OP_00E0(); // CLS
+        void OP_00EE(); // RET
+        void OP_0nnn(); // SYS addr
+        void OP_1nnn(); // JP addr
+        void OP_2nnn(); // CALL addr
+        void OP_3xkk(); // SE Vx, byte
+        void OP_4xkk(); // SNE Vx, byte
+        void OP_5xy0(); // SE Vx, Vy
+        void OP_6xkk(); // LD Vx, byte
+        void OP_7xkk(); // ADD Vx, byte
+        void OP_8xy0(); // LD Vx, Vy
+        void OP_8xy1(); // OR Vx, Vy
+        void OP_8xy2(); // AND Vx, Vy
+        void OP_8xy3(); // xOR Vx, Vy
+        void OP_8xy4(); // ADD Vx, Vy
+        void OP_8xy5(); // SUB Vx, Vy
+        void OP_8xy6(); // SHR Vx {, Vy}
+        void OP_8xy7(); // SUBN Vx, Vy
+        void OP_8xyE(); // SHL Vx {, Vy}
+        void OP_9xy0(); // SNE Vx, Vy
+        void OP_Annn(); // LD I, addr
+        void OP_Bnnn(); // JP V0, addr
+        void OP_Cxkk(); // RND Vx, byte
+        void OP_Dxyn(); // DRW Vx, Vy, nibble
+        void OP_Ex9E(); // SKP Vx
+        void OP_ExA1(); // SKNP Vx
+        void OP_Fx07(); // LD Vx, DT
+        void OP_Fx0A(); // LD Vx, K
+        void OP_Fx15(); // LD DT, Vx
+        void OP_Fx18(); // LD ST, Vx
+        void OP_Fx1E(); // ADD I, Vx
+        void OP_Fx29(); // LD F, Vx
+        void OP_Fx33(); // LD B, Vx
+        void OP_Fx55(); // LD [I], Vx
+        void OP_Fx65(); // LD Vx, [I]
 };
 
 /**
@@ -38,7 +73,7 @@ Chip8::Chip8() {
 }
 
 
-/* Initialization functions */
+/* Initialization and utility functions */
 
 /**
  * Load the ROM into memory starting from address 0x200
@@ -108,6 +143,150 @@ void Chip8::updateTimers() {
     }
 }
 
+
+/* OP Codes */
+
+void Chip8::OP_00E0() {
+    
+}
+
+void Chip8::OP_00EE() {
+    
+}
+
+void Chip8::OP_0nnn() {
+    
+}
+
+void Chip8::OP_1nnn() {
+    
+}
+
+void Chip8::OP_2nnn() {
+    
+}
+
+void Chip8::OP_3xkk() {
+    
+}
+
+void Chip8::OP_4xkk() {
+    
+}
+
+void Chip8::OP_5xy0() {
+    
+}
+
+void Chip8::OP_6xkk() {
+    
+}
+
+void Chip8::OP_7xkk() {
+    
+}
+
+void Chip8::OP_8xy0() {
+    
+}
+
+void Chip8::OP_8xy1() {
+    
+}
+
+void Chip8::OP_8xy2() {
+    
+}
+
+void Chip8::OP_8xy3() {
+    
+}
+
+void Chip8::OP_8xy4() {
+    
+}
+
+void Chip8::OP_8xy5() {
+    
+}
+
+void Chip8::OP_8xy6() {
+    
+}
+
+void Chip8::OP_8xy7() {
+    
+}
+
+void Chip8::OP_8xyE() {
+    
+}
+
+void Chip8::OP_9xy0() {
+    
+}
+
+void Chip8::OP_Annn() {
+    
+}
+
+void Chip8::OP_Bnnn() {
+    
+}
+
+void Chip8::OP_Cxkk() {
+    
+}
+
+void Chip8::OP_Dxyn() {
+    
+}
+
+void Chip8::OP_Ex9E() {
+    
+}
+
+void Chip8::OP_ExA1() {
+    
+}
+
+void Chip8::OP_Fx07() {
+    
+}
+
+void Chip8::OP_Fx0A() {
+    
+}
+
+void Chip8::OP_Fx15() {
+    
+}
+
+void Chip8::OP_Fx18() {
+    
+}
+
+void Chip8::OP_Fx1E() {
+    
+}
+
+void Chip8::OP_Fx29() {
+    
+}
+
+void Chip8::OP_Fx33() {
+    
+}
+
+void Chip8::OP_Fx55() {
+    
+}
+
+void Chip8::OP_Fx65() {
+    
+}
+
+
 /**
  * Main fetch-decode-execute cycle
  */
@@ -117,12 +296,167 @@ void Chip8::cycle() {
 
     pc += 2;
 
-    // Decode
-    switch (instruction) {
-        
-    }
+    // Decode & Execute
+    uint8_t b1 = (instruction & 0xFF00) >> 8;
+    uint8_t b2 = instruction & 0x00FF;
+    uint8_t n1 = (b1 & 0xF0) >> 4;
+    uint8_t n2 = b1 & 0x0F;
+    uint8_t n3 = (b2 & 0xF0) >> 4;
+    uint8_t n4 = b2 & 0x0F;
 
-    // Execute
+    switch (n1) {
+        case 0:
+            switch (b2) {
+                case 0xE0:
+                    OP_00E0();
+                    break;
+                
+                case 0xEE:
+                    OP_00EE();
+                    break;
+            }
+            break;
+
+        case 1:
+            OP_1nnn();
+            break;
+
+        case 2:
+            OP_2nnn();
+            break;
+
+        case 3:
+            OP_3xkk();
+            break;
+
+        case 4:
+            OP_4xkk();
+            break;
+
+        case 5:
+            OP_5xy0();
+            break;
+
+        case 6:
+            OP_6xkk();
+            break;
+
+        case 7:
+            OP_7xkk();
+            break;
+
+        case 8:
+            switch (n4) {
+                case 0:
+                    OP_8xy0();
+                    break;
+
+                case 1:
+                    OP_8xy1();
+                    break;
+
+                case 2:
+                    OP_8xy2();
+                    break;
+                
+                case 3:
+                    OP_8xy3();
+                    break;
+                
+                case 4:
+                    OP_8xy4();
+                    break;
+                
+                case 5:
+                    OP_8xy5();
+                    break;
+                
+                case 6:
+                    OP_8xy6();
+                    break;
+                
+                case 7:
+                    OP_8xy7();
+                    break;
+                
+                case 0xE:
+                    OP_8xyE();
+                    break;    
+            }
+            break;
+
+        case 9:
+            OP_9xy0();
+            break;
+
+        case 0xA:
+            OP_Annn();
+            break;
+
+        case 0xB:
+            OP_Bnnn();
+            break;
+
+        case 0xC:
+            OP_Cxkk();
+            break;
+
+        case 0xD:
+            OP_Dxyn();
+            break;
+
+        case 0xE:
+            switch (b2) {
+                case 0x9E:
+                    OP_Ex9E();
+                    break;
+                
+                case 0xA1:
+                    OP_ExA1();
+                    break;
+            }
+            break;
+
+        case 0xF:
+            switch (b2) {
+                case 0x07:
+                    OP_Fx07();
+                    break;
+
+                case 0x0A:
+                    OP_Fx0A();
+                    break;
+
+                case 0x15:
+                    OP_Fx15();
+                    break;
+
+                case 0x18:
+                    OP_Fx18();
+                    break;
+                
+                case 0x1E:
+                    OP_Fx1E();
+                    break;
+
+                case 0x29:
+                    OP_Fx29();
+                    break;
+
+                case 0x33:
+                    OP_Fx33();
+                    break;
+                
+                case 0x55:
+                    OP_Fx55();
+                    break;
+
+                case 0x65:
+                    OP_Fx65();
+                    break;
+            }
+            break;
+    }
 }
 
 int main() {
