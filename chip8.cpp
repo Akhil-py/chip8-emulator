@@ -250,8 +250,13 @@ void Chip8::OP_9xy0(uint8_t x, uint8_t y) {
     
 }
 
+/**
+ * Set index
+ * 
+ * nnn - sets the index register I to the value nnn
+ */
 void Chip8::OP_Annn(uint16_t nnn) {
-    
+    I = nnn;
 }
 
 void Chip8::OP_Bnnn(uint16_t nnn) {
