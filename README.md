@@ -7,7 +7,7 @@ This project is a WIP.
 Graphics, sound, and key inputs are processed using SDL2.
 
 ## Chip8 Key Mapping
-![Chip-8 to Interpretter Layout](keypad.png)
+![Chip-8 to Interpretter Layout](src/keypad.png)
 
 ## Memory Map
 ```
