@@ -34,39 +34,39 @@ class Chip8 {
         /* OP Codes */
         void OP_00E0(); // CLS
         void OP_00EE(); // RET
-        void OP_0nnn(); // SYS addr
-        void OP_1nnn(); // JP addr
-        void OP_2nnn(); // CALL addr
-        void OP_3xkk(); // SE Vx, byte
-        void OP_4xkk(); // SNE Vx, byte
-        void OP_5xy0(); // SE Vx, Vy
-        void OP_6xkk(); // LD Vx, byte
-        void OP_7xkk(); // ADD Vx, byte
-        void OP_8xy0(); // LD Vx, Vy
-        void OP_8xy1(); // OR Vx, Vy
-        void OP_8xy2(); // AND Vx, Vy
-        void OP_8xy3(); // xOR Vx, Vy
-        void OP_8xy4(); // ADD Vx, Vy
-        void OP_8xy5(); // SUB Vx, Vy
-        void OP_8xy6(); // SHR Vx {, Vy}
-        void OP_8xy7(); // SUBN Vx, Vy
-        void OP_8xyE(); // SHL Vx {, Vy}
-        void OP_9xy0(); // SNE Vx, Vy
-        void OP_Annn(); // LD I, addr
-        void OP_Bnnn(); // JP V0, addr
-        void OP_Cxkk(); // RND Vx, byte
-        void OP_Dxyn(); // DRW Vx, Vy, nibble
-        void OP_Ex9E(); // SKP Vx
-        void OP_ExA1(); // SKNP Vx
-        void OP_Fx07(); // LD Vx, DT
-        void OP_Fx0A(); // LD Vx, K
-        void OP_Fx15(); // LD DT, Vx
-        void OP_Fx18(); // LD ST, Vx
-        void OP_Fx1E(); // ADD I, Vx
-        void OP_Fx29(); // LD F, Vx
-        void OP_Fx33(); // LD B, Vx
-        void OP_Fx55(); // LD [I], Vx
-        void OP_Fx65(); // LD Vx, [I]
+        void OP_0nnn(uint16_t nnn); // SYS addr
+        void OP_1nnn(uint16_t nnn); // JP addr
+        void OP_2nnn(uint16_t nnn); // CALL addr
+        void OP_3xkk(uint8_t x, uint8_t kk); // SE Vx, byte
+        void OP_4xkk(uint8_t x, uint8_t kk); // SNE Vx, byte
+        void OP_5xy0(uint8_t x, uint8_t y); // SE Vx, Vy
+        void OP_6xkk(uint8_t x, uint8_t kk); // LD Vx, byte
+        void OP_7xkk(uint8_t x, uint8_t kk); // ADD Vx, byte
+        void OP_8xy0(uint8_t x, uint8_t y); // LD Vx, Vy
+        void OP_8xy1(uint8_t x, uint8_t y); // OR Vx, Vy
+        void OP_8xy2(uint8_t x, uint8_t y); // AND Vx, Vy
+        void OP_8xy3(uint8_t x, uint8_t y); // xOR Vx, Vy
+        void OP_8xy4(uint8_t x, uint8_t y); // ADD Vx, Vy
+        void OP_8xy5(uint8_t x, uint8_t y); // SUB Vx, Vy
+        void OP_8xy6(uint8_t x, uint8_t y); // SHR Vx {, Vy}
+        void OP_8xy7(uint8_t x, uint8_t y); // SUBN Vx, Vy
+        void OP_8xyE(uint8_t x, uint8_t y); // SHL Vx {, Vy}
+        void OP_9xy0(uint8_t x, uint8_t y); // SNE Vx, Vy
+        void OP_Annn(uint16_t nnn); // LD I, addr
+        void OP_Bnnn(uint16_t nnn); // JP V0, addr
+        void OP_Cxkk(uint8_t x, uint8_t kk); // RND Vx, byte
+        void OP_Dxyn(uint8_t x, uint8_t y, uint8_t n); // DRW Vx, Vy, nibble
+        void OP_Ex9E(uint8_t x); // SKP Vx
+        void OP_ExA1(uint8_t x); // SKNP Vx
+        void OP_Fx07(uint8_t x); // LD Vx, DT
+        void OP_Fx0A(uint8_t x); // LD Vx, K
+        void OP_Fx15(uint8_t x); // LD DT, Vx
+        void OP_Fx18(uint8_t x); // LD ST, Vx
+        void OP_Fx1E(uint8_t x); // ADD I, Vx
+        void OP_Fx29(uint8_t x); // LD F, Vx
+        void OP_Fx33(uint8_t x); // LD B, Vx
+        void OP_Fx55(uint8_t x); // LD [I], Vx
+        void OP_Fx65(uint8_t x); // LD Vx, [I]
 };
 
 /**
@@ -161,135 +161,139 @@ void Chip8::OP_00EE() {
     
 }
 
-void Chip8::OP_0nnn() {
+void Chip8::OP_0nnn(uint16_t nnn) {
     
 }
 
-void Chip8::OP_1nnn() {
+/**
+ * Jump
+ * nnn - Set PC to nnn
+ */
+void Chip8::OP_1nnn(uint16_t nnn) {
+    pc = nnn;
+}
+
+void Chip8::OP_2nnn(uint16_t nnn) {
     
 }
 
-void Chip8::OP_2nnn() {
+void Chip8::OP_3xkk(uint8_t x, uint8_t kk) {
     
 }
 
-void Chip8::OP_3xkk() {
+void Chip8::OP_4xkk(uint8_t x, uint8_t kk) {
     
 }
 
-void Chip8::OP_4xkk() {
+void Chip8::OP_5xy0(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_5xy0() {
+void Chip8::OP_6xkk(uint8_t x, uint8_t kk) {
     
 }
 
-void Chip8::OP_6xkk() {
+void Chip8::OP_7xkk(uint8_t x, uint8_t kk) {
     
 }
 
-void Chip8::OP_7xkk() {
+void Chip8::OP_8xy0(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy0() {
+void Chip8::OP_8xy1(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy1() {
+void Chip8::OP_8xy2(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy2() {
+void Chip8::OP_8xy3(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy3() {
+void Chip8::OP_8xy4(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy4() {
+void Chip8::OP_8xy5(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy5() {
+void Chip8::OP_8xy6(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy6() {
+void Chip8::OP_8xy7(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xy7() {
+void Chip8::OP_8xyE(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_8xyE() {
+void Chip8::OP_9xy0(uint8_t x, uint8_t y) {
     
 }
 
-void Chip8::OP_9xy0() {
+void Chip8::OP_Annn(uint16_t nnn) {
     
 }
 
-void Chip8::OP_Annn() {
+void Chip8::OP_Bnnn(uint16_t nnn) {
     
 }
 
-void Chip8::OP_Bnnn() {
+void Chip8::OP_Cxkk(uint8_t x, uint8_t kk) {
     
 }
 
-void Chip8::OP_Cxkk() {
+void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {
     
 }
 
-void Chip8::OP_Dxyn() {
+void Chip8::OP_Ex9E(uint8_t x) {
     
 }
 
-void Chip8::OP_Ex9E() {
+void Chip8::OP_ExA1(uint8_t x) {
     
 }
 
-void Chip8::OP_ExA1() {
+void Chip8::OP_Fx07(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx07() {
+void Chip8::OP_Fx0A(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx0A() {
+void Chip8::OP_Fx15(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx15() {
+void Chip8::OP_Fx18(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx18() {
+void Chip8::OP_Fx1E(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx1E() {
+void Chip8::OP_Fx29(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx29() {
+void Chip8::OP_Fx33(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx33() {
+void Chip8::OP_Fx55(uint8_t x) {
     
 }
 
-void Chip8::OP_Fx55() {
-    
-}
-
-void Chip8::OP_Fx65() {
+void Chip8::OP_Fx65(uint8_t x) {
     
 }
 
@@ -310,6 +314,12 @@ void Chip8::cycle() {
     uint8_t n2 = b1 & 0x0F;
     uint8_t n3 = (b2 & 0xF0) >> 4;
     uint8_t n4 = b2 & 0x0F;
+
+    uint8_t x = n2; // Second nibble: Register lookup Vx (V0 - VF)
+    uint8_t y = n3; // Third nibble: Register lookup Vx (V0 - VF)
+    uint8_t n = n4; // Fourth nibble: A 4-bit number
+    uint8_t kk = b2; // Second byte: An 8-bit immediate number
+    uint16_t nnn = instruction & 0x0FFF;  // The second, third and fourth nibbles. A 12-bit immediate memory address
  
     switch (n1) {
         case 0:
@@ -325,101 +335,101 @@ void Chip8::cycle() {
             break;
 
         case 1:
-            OP_1nnn();
+            OP_1nnn(nnn);
             break;
 
         case 2:
-            OP_2nnn();
+            OP_2nnn(nnn);
             break;
 
         case 3:
-            OP_3xkk();
+            OP_3xkk(x, kk);
             break;
 
         case 4:
-            OP_4xkk();
+            OP_4xkk(x, kk);
             break;
 
         case 5:
-            OP_5xy0();
+            OP_5xy0(x, y);
             break;
 
         case 6:
-            OP_6xkk();
+            OP_6xkk(x, kk);
             break;
 
         case 7:
-            OP_7xkk();
+            OP_7xkk(x, kk);
             break;
 
         case 8:
             switch (n4) {
                 case 0:
-                    OP_8xy0();
+                    OP_8xy0(x, y);
                     break;
 
                 case 1:
-                    OP_8xy1();
+                    OP_8xy1(x, y);
                     break;
 
                 case 2:
-                    OP_8xy2();
+                    OP_8xy2(x, y);
                     break;
                 
                 case 3:
-                    OP_8xy3();
+                    OP_8xy3(x, y);
                     break;
                 
                 case 4:
-                    OP_8xy4();
+                    OP_8xy4(x, y);
                     break;
                 
                 case 5:
-                    OP_8xy5();
+                    OP_8xy5(x, y);
                     break;
                 
                 case 6:
-                    OP_8xy6();
+                    OP_8xy6(x, y);
                     break;
                 
                 case 7:
-                    OP_8xy7();
+                    OP_8xy7(x, y);
                     break;
                 
                 case 0xE:
-                    OP_8xyE();
+                    OP_8xyE(x, y);
                     break;    
             }
             break;
 
         case 9:
-            OP_9xy0();
+            OP_9xy0(x, y);
             break;
 
         case 0xA:
-            OP_Annn();
+            OP_Annn(nnn);
             break;
 
         case 0xB:
-            OP_Bnnn();
+            OP_Bnnn(nnn);
             break;
 
         case 0xC:
-            OP_Cxkk();
+            OP_Cxkk(x, kk);
             break;
 
         case 0xD:
-            OP_Dxyn();
+            OP_Dxyn(x, y, n);
             break;
 
         case 0xE:
             switch (b2) {
                 case 0x9E:
-                    OP_Ex9E();
+                    OP_Ex9E(x);
                     break;
                 
                 case 0xA1:
-                    OP_ExA1();
+                    OP_ExA1(x);
                     break;
             }
             break;
@@ -427,39 +437,39 @@ void Chip8::cycle() {
         case 0xF:
             switch (b2) {
                 case 0x07:
-                    OP_Fx07();
+                    OP_Fx07(x);
                     break;
 
                 case 0x0A:
-                    OP_Fx0A();
+                    OP_Fx0A(x);
                     break;
 
                 case 0x15:
-                    OP_Fx15();
+                    OP_Fx15(x);
                     break;
 
                 case 0x18:
-                    OP_Fx18();
+                    OP_Fx18(x);
                     break;
                 
                 case 0x1E:
-                    OP_Fx1E();
+                    OP_Fx1E(x);
                     break;
 
                 case 0x29:
-                    OP_Fx29();
+                    OP_Fx29(x);
                     break;
 
                 case 0x33:
-                    OP_Fx33();
+                    OP_Fx33(x);
                     break;
                 
                 case 0x55:
-                    OP_Fx55();
+                    OP_Fx55(x);
                     break;
 
                 case 0x65:
-                    OP_Fx65();
+                    OP_Fx65(x);
                     break;
             }
             break;
