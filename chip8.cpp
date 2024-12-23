@@ -155,6 +155,7 @@ void Chip8::updateTimers() {
  */
 void Chip8::OP_00E0() {
     memset(display, 0, WIDTH * HEIGHT * sizeof(uint32_t));
+    // TODO: Call update(display) from window.cpp
 }
 
 void Chip8::OP_00EE() {
@@ -267,8 +268,39 @@ void Chip8::OP_Cxkk(uint8_t x, uint8_t kk) {
     
 }
 
-void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {
-    
+/**
+ * Display
+ * 
+ * Draw an N pixels tall sprite from the memory location that the I index 
+ * register is holding to the screen, at the horizontal X coordinate in VX and 
+ * the Y coordinate in VY
+ * 
+ * x - Value of Vx is the x coordinate to start drawing from
+ * y - Value of Vy is the y coordinate to start drawing from
+ * n - Height of sprite in pixels
+ */
+void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {    
+    for (size_t i = 0; i < n; i++) {
+        registers[0xF] = 0;
+        uint8_t y_coord = registers[y] % HEIGHT;
+        uint8_t spriteData = memory[I+i];
+        for (size_t j = 0; j < 8; j++) {
+            uint8_t x_coord = registers[x] % WIDTH;
+            uint8_t pixel = (spriteData >> (8 - j - 1)) & 0x1 ;
+            if (pixel) {
+                if (display[y_coord*WIDTH + x_coord + j]) {
+                    registers[0xF] = 1;
+                }
+                display[y_coord*WIDTH + x_coord] ^= 0xFFFFFFFF;
+            }
+            if (x_coord + j + 1 >= WIDTH) break;
+
+            x++;
+        }
+        y++;
+
+        if (y_coord + i + 1 >= HEIGHT) break;
+    }
 }
 
 void Chip8::OP_Ex9E(uint8_t x) {

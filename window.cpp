@@ -225,9 +225,9 @@ int main (int argc, char *argv[])
 
 	window.startBeep();
 
-	display[5 * WIDTH + 10] = 0xFFFFFFFF; // Pixel at (10, 5)
-    display[15 * WIDTH + 20] = 0xFFFFFFFF; // Pixel at (20, 15)
-	display[31 * WIDTH + 63] = 0xFFFFFFFF; // Pixel at (63, 31)
+	display[5 * WIDTH + 10] = 0x00000000 ^ 0xFFFFFFFF; // Pixel at (10, 5)
+    display[15 * WIDTH + 20] = 0xFFFFFFFF ^ 0x00; // Pixel at (20, 15)
+	display[31 * WIDTH + 63] = 0x00000000 ^ 0xFFFFFFFF; // Pixel at (63, 31)
 
 	window.update(display);
 
