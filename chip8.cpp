@@ -25,6 +25,7 @@ class Chip8 {
         void loadRom(string ROM);
         void loadFonts();
         void updateTimers();
+        void cycle();
 
         /* OP Codes */
 };
@@ -95,6 +96,9 @@ void Chip8::loadFonts() {
     }
 }
 
+/**
+ * Decrement sound and delay timer by 1 if they are greater than 0    
+ */
 void Chip8::updateTimers() {
     if (soundTimer > 0) {
         soundTimer--;
@@ -104,6 +108,22 @@ void Chip8::updateTimers() {
     }
 }
 
+/**
+ * Main fetch-decode-execute cycle
+ */
+void Chip8::cycle() {
+    // Fetch
+    uint16_t instruction = (memory[pc] << 8) |  memory[pc+1];
+
+    pc += 2;
+
+    // Decode
+    switch (instruction) {
+        
+    }
+
+    // Execute
+}
 
 int main() {
     cout << "Starting" << endl;
