@@ -1,13 +1,21 @@
 #include <cstdint>
 #include <iostream>
 #include <fstream>
+#include <cstring>
 //#include "Window.cpp"
 using namespace std;
 
 class Chip8 {
     public:
+        /* Constants */
+        static int const WIDTH = 64; // Display's x dimension 
+        static int const HEIGHT = 32; // Display's y dimension
+        int const START_ADDRESS = 0x200; // Load ROM from this address onwards (512 in base 10)
+        int const FONT_ADDRESS = 0x50; // Load Fonts at this address
+
+        /* Instance variables */
         uint8_t memory[4096]{};
-        uint32_t display[64 * 32]{}; // Monochrome display
+        uint32_t display[WIDTH * HEIGHT]{}; // Monochrome display
         uint16_t pc{};
         uint16_t I{};
         uint16_t stack[16]{};
@@ -16,10 +24,6 @@ class Chip8 {
         uint8_t soundTimer{}; // Decrements at 60Hz, buzzes when non-zero
         uint8_t registers[16]{}; // v0-vF
         size_t keys[16]{}; // Chip 8's input keys: 1 - 0xF 
-
-        /* Constants */
-        int const START_ADDRESS = 0x200; // Load ROM from this address onwards (512 in base 10)
-        int const FONT_ADDRESS = 0x50; // Load Fonts at this address
 
         /* Initializations and utility functions */
         void loadRom(string ROM);
@@ -146,8 +150,11 @@ void Chip8::updateTimers() {
 
 /* OP Codes */
 
+/**
+ * Clear Screen
+ */
 void Chip8::OP_00E0() {
-    
+    memset(display, 0, WIDTH * HEIGHT * sizeof(uint32_t));
 }
 
 void Chip8::OP_00EE() {
@@ -303,7 +310,7 @@ void Chip8::cycle() {
     uint8_t n2 = b1 & 0x0F;
     uint8_t n3 = (b2 & 0xF0) >> 4;
     uint8_t n4 = b2 & 0x0F;
-
+ 
     switch (n1) {
         case 0:
             switch (b2) {
