@@ -167,6 +167,7 @@ void Chip8::OP_0nnn(uint16_t nnn) {
 
 /**
  * Jump
+ * 
  * nnn - Set PC to nnn
  */
 void Chip8::OP_1nnn(uint16_t nnn) {
@@ -191,6 +192,7 @@ void Chip8::OP_5xy0(uint8_t x, uint8_t y) {
 
 /**
  * Set - set the register Vx to the value kk
+ * 
  * x - Vx register to be set
  * kk - value to put in Vx
  */
@@ -198,8 +200,14 @@ void Chip8::OP_6xkk(uint8_t x, uint8_t kk) {
     registers[x] = kk;
 }
 
+/**
+ * Add - Add the value kk to Vx
+ * 
+ * x - Register Vx
+ * kk - Value to be added to Vx
+ */
 void Chip8::OP_7xkk(uint8_t x, uint8_t kk) {
-    
+    registers[x] += kk;
 }
 
 void Chip8::OP_8xy0(uint8_t x, uint8_t y) {
