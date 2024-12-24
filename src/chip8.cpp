@@ -272,7 +272,7 @@ void Chip8::OP_8xy0(uint8_t x, uint8_t y) {
  * @param y - Register Vy
  */
 void Chip8::OP_8xy1(uint8_t x, uint8_t y) {
-    registers[x] = registers[x] | registers[y];
+    registers[x] |= registers[y];
 }
 
 /**
@@ -282,7 +282,7 @@ void Chip8::OP_8xy1(uint8_t x, uint8_t y) {
  * @param y - Register Vy
  */
 void Chip8::OP_8xy2(uint8_t x, uint8_t y) {
-    registers[x] = registers[x] & registers[y];
+    registers[x] &= registers[y];
 }
 
 /**
@@ -292,23 +292,59 @@ void Chip8::OP_8xy2(uint8_t x, uint8_t y) {
  * @param y - Register Vy
  */
 void Chip8::OP_8xy3(uint8_t x, uint8_t y) {
-    registers[x] = registers[x] ^ registers[y];
+    registers[x] ^= registers[y];
 }
 
+/**
+ * Add with carry flag - Add the value Vy to Vx and set VF to 1 if an overflow occurs
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy4(uint8_t x, uint8_t y) {
-    
+    registers[x] += registers[y];
+    if (registers[x] < registers[y]) {
+        registers[0xF] = 1;
+    }
+    else {
+        registers[0xF] = 0;
+    }
 }
 
+/**
+ * Substract - Substract the value Vy from Vx and set VF as appropriate
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy5(uint8_t x, uint8_t y) {
-    
+    if (registers[x] > registers[y]) {
+        registers[0xF] = 1;
+    }
+    else {
+        registers[0xF] = 0;
+    }
+    registers[x] -= registers[y];
 }
 
 void Chip8::OP_8xy6(uint8_t x, uint8_t y) {
     
 }
 
+/**
+ * Substract - Substract the value Vx from Vy and set VF as appropriate
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy7(uint8_t x, uint8_t y) {
-    
+    if (registers[y] > registers[x]) {
+        registers[0xF] = 1;
+    }
+    else {
+        registers[0xF] = 0;
+    }
+    registers[x] = registers[y] - registers[x];
 }
 
 void Chip8::OP_8xyE(uint8_t x, uint8_t y) {
@@ -614,13 +650,12 @@ void Chip8::cycle() {
 
 int main() {
     cout << "Starting" << endl;
-    const int SCALE = 25;
     Chip8 chip8 = Chip8();
     chip8.loadRom("../roms/IBM Logo.ch8");
     chip8.loadFonts();
 
     size_t i = 0;
-    while (i < 999999999) {
+    while (true) {
         chip8.cycle();
         chip8.updateTimers();
         i++;
