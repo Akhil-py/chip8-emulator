@@ -238,8 +238,8 @@ void Chip8::OP_5xy0(uint8_t x, uint8_t y) {
 /**
  * Set - set the register Vx to the value kk
  * 
- * x - Vx register to be set
- * kk - value to put in Vx
+ * @param x - Vx register to be set
+ * @param kk - value to put in Vx
  */
 void Chip8::OP_6xkk(uint8_t x, uint8_t kk) {
     registers[x] = kk;
@@ -248,15 +248,21 @@ void Chip8::OP_6xkk(uint8_t x, uint8_t kk) {
 /**
  * Add - Add the value kk to Vx
  * 
- * x - Register Vx
- * kk - Value to be added to Vx
+ * @param x - Register Vx
+ * @param kk - Value to be added to Vx
  */
 void Chip8::OP_7xkk(uint8_t x, uint8_t kk) {
     registers[x] += kk;
 }
 
+/**
+ * Set - Set Vx to Vy
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy0(uint8_t x, uint8_t y) {
-    
+    registers[x] = registers[y];
 }
 
 void Chip8::OP_8xy1(uint8_t x, uint8_t y) {
@@ -306,7 +312,7 @@ void Chip8::OP_9xy0(uint8_t x, uint8_t y) {
 /**
  * Set index
  * 
- * nnn - sets the index register I to the value nnn
+ * @param nnn - sets the index register I to the value nnn
  */
 void Chip8::OP_Annn(uint16_t nnn) {
     I = nnn;
@@ -327,9 +333,9 @@ void Chip8::OP_Cxkk(uint8_t x, uint8_t kk) {
  * register is holding to the screen, at the horizontal X coordinate in VX and 
  * the Y coordinate in VY
  * 
- * x - Value of Vx is the x coordinate to start drawing from
- * y - Value of Vy is the y coordinate to start drawing from
- * n - Height of sprite in pixels
+ * @param x - Value of Vx is the x coordinate to start drawing from
+ * @param y - Value of Vy is the y coordinate to start drawing from
+ * @param n - Height of sprite in pixels
  */
 void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {  
     uint8_t x_coord = registers[x] % WIDTH;
