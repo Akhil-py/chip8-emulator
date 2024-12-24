@@ -424,7 +424,8 @@ void Chip8::OP_Bnnn(uint16_t nnn) {
  * @param kk - Value to AND with
  */
 void Chip8::OP_Cxkk(uint8_t x, uint8_t kk) {
-    
+    uint8_t random = rand() % 256;
+    registers[x] = random & kk;
 }
 
 /**
