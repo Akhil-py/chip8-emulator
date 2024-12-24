@@ -6,6 +6,29 @@ This project is a WIP.
 
 Graphics, sound, and key inputs are processed using SDL2.
 
+## How To Run
+Run with make file.
+
+### Optional Command-Line Arguments
+- `--cp-shift`
+Type: bool
+Default: false
+Enables the alternate implementation of OP_8xy6 and OP_8xyE instructions, following the behavior introduced by Super-Chip and the Chip-48 interpreter.
+
+- `--sc-jump`
+Type: bool
+Default: false
+Enables the alternate implementation of OP_Bnnn (Jump with offset), following the behavior introduced by the Super-Chip and the Chip-48 interpreter.
+
+- `--scale <value>`
+Type: int
+Default: 20
+Specifies the scaling factor for the window size. The actual window dimensions are calculated as WIDTH * SCALE and HEIGHT * SCALE.
+
+**Example Usage: **
+```./chip8 --cp-shift --sc-jump --scale 30
+```
+
 ## Chip8 Key Mapping
 ![Chip-8 to Interpretter Layout](src/keypad.png)
 

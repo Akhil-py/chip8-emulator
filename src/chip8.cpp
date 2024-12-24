@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <cstdlib>
 #include <unistd.h>
 #include "Window.h"
 using namespace std;
