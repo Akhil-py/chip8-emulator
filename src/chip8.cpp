@@ -265,12 +265,24 @@ void Chip8::OP_8xy0(uint8_t x, uint8_t y) {
     registers[x] = registers[y];
 }
 
+/**
+ * OR - Set Vx to Vx OR Vy
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy1(uint8_t x, uint8_t y) {
-    
+    registers[x] = registers[x] | registers[y];
 }
 
+/**
+ * AND - Set Vx to Vx AND Vy
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy2(uint8_t x, uint8_t y) {
-    
+    registers[x] = registers[x] & registers[y];
 }
 
 void Chip8::OP_8xy3(uint8_t x, uint8_t y) {
