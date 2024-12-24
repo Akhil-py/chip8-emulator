@@ -172,14 +172,21 @@ void Chip8::OP_0nnn(uint16_t nnn) {
 /**
  * Jump
  * 
- * nnn - Set PC to nnn
+ * @param nnn - Set PC to nnn
  */
 void Chip8::OP_1nnn(uint16_t nnn) {
     pc = nnn;
 }
 
+/**
+ * Call - Call subroutine at nnn
+ * 
+ * @param nnn - Address to jump to
+ */
 void Chip8::OP_2nnn(uint16_t nnn) {
-    
+    stack[sp] = pc;
+    sp++;
+    pc = nnn;
 }
 
 void Chip8::OP_3xkk(uint8_t x, uint8_t kk) {
