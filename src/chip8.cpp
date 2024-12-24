@@ -285,8 +285,14 @@ void Chip8::OP_8xy2(uint8_t x, uint8_t y) {
     registers[x] = registers[x] & registers[y];
 }
 
+/**
+ * XOR - Set Vx to Vx XOR Vy
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_8xy3(uint8_t x, uint8_t y) {
-    
+    registers[x] = registers[x] ^ registers[y];
 }
 
 void Chip8::OP_8xy4(uint8_t x, uint8_t y) {
