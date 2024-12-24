@@ -12,6 +12,10 @@ all: $(OUT)
 $(OUT): $(SRCS)
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
+# Run target
+run: $(OUT)
+	./$(OUT) $(ARGS)
+
 # Clean target
 clean:
 	rm -f $(OUT)

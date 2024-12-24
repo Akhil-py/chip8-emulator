@@ -153,7 +153,12 @@ void Chip8::loadFonts() {
 void Chip8::updateTimers() {
     if (soundTimer > 0) {
         soundTimer--;
+        window.startBeep();
     }
+    else {
+        window.stopBeep();
+    }
+
     if (delayTimer > 0) {
         delayTimer--;
     }
@@ -567,9 +572,9 @@ void Chip8::OP_Fx29(uint8_t x) {
  * @param x - Register Vx
  */
 void Chip8::OP_Fx33(uint8_t x) {
-    memory[I] = x / 100;
-    memory[I+1] = (x / 10) % 10;
-    memory[I+2] = x % 10;
+    memory[I] = registers[x] / 100;
+    memory[I+1] = (registers[x] / 10) % 10;
+    memory[I+2] = registers[x] % 10;
 }
 
 /**
@@ -799,6 +804,8 @@ int main(int argc, char* argv[]) {
     bool sc_jump = false;    // Set true for alternate implementation of OP_Bnnn
     bool cosmac_mem = false; // Set true for alternate implementation of OP_Fx55 and OP_Fx65
     int scale = 20;          // Scaling for window size
+    int speed = 700;         // Speed of the emulator
+    string rom = argv[1];
     
     for (int i = 0; i < argc; i++) {
         string arg = argv[i];
@@ -818,10 +825,14 @@ int main(int argc, char* argv[]) {
         if (arg == "--scale" && i + 1 < argc) {
             scale = int(atoi(argv[++i]) - '0');
         }
+
+        if (arg == "--speed" && i + 1 < argc) {
+            speed = int(atoi(argv[++i]) - '0');
+        }
     }
 
     Chip8 chip8 = Chip8(scale, cp_shift, sc_jump, cosmac_mem);
-    chip8.loadRom("../roms/IBM Logo.ch8");
+    chip8.loadRom(rom);
     chip8.loadFonts();
 
     bool quit = false;
@@ -829,9 +840,8 @@ int main(int argc, char* argv[]) {
         quit = chip8.window.processInput(chip8.keys);
         chip8.cycle();
         chip8.updateTimers();
+        sleep(1/speed);
     }
-
-    sleep(30);
 
     return 0;
 }

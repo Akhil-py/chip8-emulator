@@ -7,32 +7,36 @@ This project is a WIP.
 Graphics, sound, and key inputs are processed using SDL2.
 
 ## How To Run
-Run with make file.
+Build with make file. Run `make` in the `src` directory to build.
+To start the emulator, run:
+```
+./chip8 ../roms/<name of rom>
+```
 
 ### Optional Command-Line Arguments
 - `--cp_shift`
-Type: bool
-Default: false
-Enables the alternate implementation of OP_8xy6 and OP_8xyE instructions, following the behavior introduced by Super-Chip and the Chip-48 interpreter.
+-- Default: false
+-- Enables the alternate implementation of OP_8xy6 and OP_8xyE instructions, following the behavior introduced by Super-Chip and the Chip-48 interpreter.
 
 - `--sc_jump`
-Type: bool
-Default: false
-Enables the alternate implementation of OP_Bnnn (Jump with offset), following the behavior introduced by the Super-Chip and the Chip-48 interpreter.
+-- Default: false
+-- Enables the alternate implementation of OP_Bnnn (Jump with offset), following the behavior introduced by the Super-Chip and the Chip-48 interpreter.
 
 - `--cosmac_mem`
-Type: bool
-Default: false
-Enables the alternate implementation of OP_Fx55 and OP_Fx65 (Store/Load Memory), following the original behavior set by the COSMAC VIP CHIP-8 Interpreter. The default implementation (without this flag) follows the behavior introduced by the Super-Chip and the Chip-48 interpreter.
+-- Default: false
+-- Enables the alternate implementation of OP_Fx55 and OP_Fx65 (Store/Load Memory), following the original behavior set by the original COSMAC VIP CHIP-8 Interpreter. The default implementation (without this flag) follows the behavior introduced by the Super-Chip and the Chip-48 interpreter.
 
 - `--scale <value>`
-Type: int
-Default: 20
-Specifies the scaling factor for the window size. The actual window dimensions are calculated as WIDTH * SCALE and HEIGHT * SCALE.
+-- Default: 20
+-- Specifies the scaling factor for the window size. The actual window dimensions are calculated as WIDTH * SCALE and HEIGHT * SCALE.
+
+- `--speed <value>`
+-- Default: 700
+-- Specifies the number of instructions to run per second.
 
 ** Example Usage: **
 ```
-./chip8 --cp_shift --sc_jump --scale 30
+./chip8 ../roms/IBM Logo.ch8 --cosmac_mem --sc_jump --scale 30 --speed 750
 ```
 
 ## Chip8 Key Mapping
