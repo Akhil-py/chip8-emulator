@@ -549,8 +549,14 @@ void Chip8::OP_Fx1E(uint8_t x) {
     I += registers[x];
 }
 
+/**
+ * Load the font character into I
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx29(uint8_t x) {
-    
+    int character = registers[x];
+    I = FONT_ADDRESS + (character * 5);
 }
 
 void Chip8::OP_Fx33(uint8_t x) {
