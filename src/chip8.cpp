@@ -30,9 +30,10 @@ class Chip8 {
         int SCALE;
         bool CP_SHIFT;
         bool SC_JUMP;
+        bool COSMAC_MEM;
 
         /* Initializations and utility functions */
-        Chip8(int scale, bool cp_shift, bool sc_jump);
+        Chip8(int scale, bool cp_shift, bool sc_jump, bool cosmac_mem);
         void loadRom(string ROM);
         void loadFonts();
         void updateTimers();
@@ -79,11 +80,12 @@ class Chip8 {
 /**
  * Constructor
  */
-Chip8::Chip8(int scale, bool cp_shift, bool sc_jump) : window(WIDTH, HEIGHT, 20) {
+Chip8::Chip8(int scale, bool cp_shift, bool sc_jump, bool cosmac_mem) : window(WIDTH, HEIGHT, 20) {
     pc = START_ADDRESS;
     SCALE = scale;
     CP_SHIFT = cp_shift;
     SC_JUMP = sc_jump;
+    COSMAC_MEM = cosmac_mem;
 }
 
 
@@ -570,12 +572,45 @@ void Chip8::OP_Fx33(uint8_t x) {
     memory[I+2] = x % 10;
 }
 
+/**
+ * Store registers V0 through Vx in memory starting at I
+ * 
+ * @param x - Register Vx
+ * @property COSMAC_MEM - If true, increment I for each register stored
+ */
 void Chip8::OP_Fx55(uint8_t x) {
+    if (COSMAC_MEM){
+        for (int i = 0; i <= x; i++) {
+            memory[I] = registers[i];
+            I++;
+        }
+    }
+    else{
+        for (int i = 0; i <= x; i++) {
+            memory[I+i] = registers[i];
+        }
+    }
     
 }
 
+/**
+ * Load registers V0 through Vx from memory starting at I
+ * 
+ * @param x - Register Vx
+ * @property COSMAC_MEM - If true, increment I for each register loaded
+ */
 void Chip8::OP_Fx65(uint8_t x) {
-    
+    if (COSMAC_MEM){
+        for (int i = 0; i <= x; i++) {
+            registers[i] = memory[I];
+            I++;
+        }
+    }
+    else{
+        for (int i = 0; i <= x; i++) {
+            registers[i] = memory[I+i];
+        }
+    }
 }
 
 
@@ -760,9 +795,10 @@ void Chip8::cycle() {
 int main(int argc, char* argv[]) {
     cout << "Starting..." << endl;
 
-    bool cp_shift = false;  // Set true for alternate implementation of OP_8xy6 and OP_8xyE
-    bool sc_jump = false;   // Set true for alternate implementation of OP_Bnnn
-    int scale = 20;         // Scaling for window size
+    bool cp_shift = false;   // Set true for alternate implementation of OP_8xy6 and OP_8xyE
+    bool sc_jump = false;    // Set true for alternate implementation of OP_Bnnn
+    bool cosmac_mem = false; // Set true for alternate implementation of OP_Fx55 and OP_Fx65
+    int scale = 20;          // Scaling for window size
     
     for (int i = 0; i < argc; i++) {
         string arg = argv[i];
@@ -775,12 +811,16 @@ int main(int argc, char* argv[]) {
             sc_jump = true;
         }
 
+        if (arg == "cosmac_mem") {
+            cosmac_mem = true;
+        }
+
         if (arg == "--scale" && i + 1 < argc) {
             scale = int(atoi(argv[++i]) - '0');
         }
     }
 
-    Chip8 chip8 = Chip8(scale, cp_shift, sc_jump);
+    Chip8 chip8 = Chip8(scale, cp_shift, sc_jump, cosmac_mem);
     chip8.loadRom("../roms/IBM Logo.ch8");
     chip8.loadFonts();
 
