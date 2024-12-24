@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <unistd.h>
 #include "Window.h"
 using namespace std;
 
@@ -24,8 +25,10 @@ class Chip8 {
         uint8_t soundTimer{}; // Decrements at 60Hz, buzzes when non-zero
         uint8_t registers[16]{}; // v0-vF
         size_t keys[16]{}; // Chip 8's input keys: 1 - 0xF 
+        Window window;
 
         /* Initializations and utility functions */
+        Chip8();
         void loadRom(string ROM);
         void loadFonts();
         void updateTimers();
@@ -72,7 +75,7 @@ class Chip8 {
 /**
  * Constructor
  */
-Chip8::Chip8() {
+Chip8::Chip8() : window(WIDTH, HEIGHT, 20) {
     pc = START_ADDRESS;
 }
 
@@ -155,7 +158,7 @@ void Chip8::updateTimers() {
  */
 void Chip8::OP_00E0() {
     memset(display, 0, WIDTH * HEIGHT * sizeof(uint32_t));
-    // TODO: Call update(display) from window.cpp
+    window.update(display);
 }
 
 void Chip8::OP_00EE() {
@@ -279,28 +282,38 @@ void Chip8::OP_Cxkk(uint8_t x, uint8_t kk) {
  * y - Value of Vy is the y coordinate to start drawing from
  * n - Height of sprite in pixels
  */
-void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {    
+void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {  
+    uint8_t x_coord = registers[x] % WIDTH;
+    uint8_t y_coord = registers[y] % HEIGHT;
+    registers[0xF] = 0;
+
+    cout << "Start of Dxyn - Drawing  n: " << int(n) << endl;  
     for (size_t i = 0; i < n; i++) {
-        registers[0xF] = 0;
-        uint8_t y_coord = registers[y] % HEIGHT;
         uint8_t spriteData = memory[I+i];
         for (size_t j = 0; j < 8; j++) {
-            uint8_t x_coord = registers[x] % WIDTH;
             uint8_t pixel = (spriteData >> (8 - j - 1)) & 0x1 ;
             if (pixel) {
                 if (display[y_coord*WIDTH + x_coord + j]) {
                     registers[0xF] = 1;
                 }
-                display[y_coord*WIDTH + x_coord] ^= 0xFFFFFFFF;
+                display[y_coord*WIDTH + x_coord + j] ^= 0xFFFFFFFF;
+                cout << "Just drew a pixel at (" << int(x_coord + j)<<", " << int(y_coord) << ")" << endl;
             }
             if (x_coord + j + 1 >= WIDTH) break;
 
-            x++;
+            //x++;
+            //cout << "X: " << int(x) << " Y: " << int(y) << " I: " << I << " N: " << int(n) << " Sprite: " << int(spriteData) << " Pixel: " << int(pixel) << " Display: " << display[y_coord*WIDTH + x_coord] << endl;
         }
-        y++;
+        cout << "Moving on to the next row: " << int(y_coord) << endl;
+        y_coord++;
 
-        if (y_coord + i + 1 >= HEIGHT) break;
+        if (y_coord + 1 >= HEIGHT) {
+            cout << "EDGE OF (y) SCREEN - BREAKING \n\n\n" << endl;
+            break;
+        }
     }
+    cout << "End of Dxyn - Drawing " << display << endl;
+    window.update(display);
 }
 
 void Chip8::OP_Ex9E(uint8_t x) {
@@ -358,11 +371,11 @@ void Chip8::cycle() {
     pc += 2;
 
     // Decode & Execute
-    uint8_t b1 = (instruction & 0xFF00) >> 8;
+    uint8_t b1 = (instruction & 0xFF00) >> 8; // TODO: Make this a logical shift
     uint8_t b2 = instruction & 0x00FF;
-    uint8_t n1 = (b1 & 0xF0) >> 4;
+    uint8_t n1 = (b1 & 0xF0) >> 4; // TODO: Make this a logical shift
     uint8_t n2 = b1 & 0x0F;
-    uint8_t n3 = (b2 & 0xF0) >> 4;
+    uint8_t n3 = (b2 & 0xF0) >> 4; // TODO: Make this a logical shift
     uint8_t n4 = b2 & 0x0F;
 
     uint8_t x = n2; // Second nibble: Register lookup Vx (V0 - VF)
@@ -528,9 +541,19 @@ void Chip8::cycle() {
 
 int main() {
     cout << "Starting" << endl;
-    Chip8 chip8;
+    const int SCALE = 25;
+    Chip8 chip8 = Chip8();
     chip8.loadRom("../roms/IBM Logo.ch8");
     chip8.loadFonts();
+
+    size_t i = 0;
+    while (i < 999999999) {
+        chip8.cycle();
+        chip8.updateTimers();
+        i++;
+    }
+
+    sleep(30);
 
     return 0;
 }
