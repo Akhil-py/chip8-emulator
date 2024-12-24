@@ -161,8 +161,13 @@ void Chip8::OP_00E0() {
     window.update(display);
 }
 
+/**
+ * Return - Return from a subroutine
+ */
 void Chip8::OP_00EE() {
-    
+    sp--;
+    pc = stack[sp];
+    stack[sp] = 0;
 }
 
 void Chip8::OP_0nnn(uint16_t nnn) {
