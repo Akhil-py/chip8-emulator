@@ -27,10 +27,11 @@ class Chip8 {
         size_t keys[16]{}; // Chip 8's input keys: 1 - 0xF 
         Window window;
         int SCALE;
-        int CP_SHIFT;
+        bool CP_SHIFT;
+        bool SC_JUMP;
 
         /* Initializations and utility functions */
-        Chip8(int scale, bool cp_shift);
+        Chip8(int scale, bool cp_shift, bool sc_jump);
         void loadRom(string ROM);
         void loadFonts();
         void updateTimers();
@@ -77,10 +78,11 @@ class Chip8 {
 /**
  * Constructor
  */
-Chip8::Chip8(int scale, bool cp_shift) : window(WIDTH, HEIGHT, 20) {
+Chip8::Chip8(int scale, bool cp_shift, bool sc_jump) : window(WIDTH, HEIGHT, 20) {
     pc = START_ADDRESS;
     SCALE = scale;
     CP_SHIFT = cp_shift;
+    SC_JUMP = sc_jump;
 }
 
 
@@ -398,10 +400,28 @@ void Chip8::OP_Annn(uint16_t nnn) {
     I = nnn;
 }
 
+/**
+ * Jump With Offset - Jump to location nnn + V0
+ * 
+ * @param nnn or xnn - Jump to location nnn + V0 or nnn + Vx
+ * @property SC_JUMP - If true, jump to nnn + Vx, otherwise jump to nnn + V0
+ */
 void Chip8::OP_Bnnn(uint16_t nnn) {
-    
+    if (SC_JUMP) {
+        uint8_t x = (nnn & 0x0F00) >> 8;
+        pc = nnn + registers[x];
+    }
+    else {
+        pc = nnn + registers[0];
+    }
 }
 
+/**
+ * Set Vx to a random number AND kk
+ * 
+ * @param x - Register Vx
+ * @param kk - Value to AND with
+ */
 void Chip8::OP_Cxkk(uint8_t x, uint8_t kk) {
     
 }
@@ -677,8 +697,9 @@ void Chip8::cycle() {
 int main(int argc, char* argv[]) {
     cout << "Starting..." << endl;
 
-    bool cp_shift = false;
-    int scale = 20;
+    bool cp_shift = false;  // Set true for alternate implementation of OP_8xy6 and OP_8xyE
+    bool sc_jump = false;   // Set true for alternate implementation of OP_Bnnn
+    int scale = 20;         // Scaling for window size
     
     for (int i = 0; i < argc; i++) {
         string arg = argv[i];
@@ -687,12 +708,16 @@ int main(int argc, char* argv[]) {
             cp_shift = true;
         }
 
+        if (arg == "--sc_jump") {
+            sc_jump = true;
+        }
+
         if (arg == "--scale" && i + 1 < argc) {
             scale = int(argv[++i] - '0');
         }
     }
 
-    Chip8 chip8 = Chip8(scale, cp_shift);
+    Chip8 chip8 = Chip8(scale, cp_shift, sc_jump);
     chip8.loadRom("../roms/IBM Logo.ch8");
     chip8.loadFonts();
 
