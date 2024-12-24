@@ -206,15 +206,33 @@ void Chip8::OP_2nnn(uint16_t nnn) {
  * @param kk - Value to compare Vx to
  */
 void Chip8::OP_3xkk(uint8_t x, uint8_t kk) {
-    
+    if (registers[x] == kk) {
+        pc += 2;
+    }
 }
 
+/**
+ * Skip if not equal
+ * 
+ * @param x - Register Vx
+ * @param kk - Value to compare Vx to
+ */
 void Chip8::OP_4xkk(uint8_t x, uint8_t kk) {
-    
+    if (registers[x] != kk) {
+        pc += 2;
+    }
 }
 
+/**
+ * Skip if registers are equal
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_5xy0(uint8_t x, uint8_t y) {
-    
+    if (registers[x] == registers[y]) {
+        pc += 2;
+    }
 }
 
 /**
@@ -273,8 +291,16 @@ void Chip8::OP_8xyE(uint8_t x, uint8_t y) {
     
 }
 
+/**
+ * Skip if registers are not equal
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ */
 void Chip8::OP_9xy0(uint8_t x, uint8_t y) {
-    
+    if (registers[x] != registers[y]) {
+        pc += 2;
+    }
 }
 
 /**
