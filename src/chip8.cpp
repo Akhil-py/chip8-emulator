@@ -473,12 +473,26 @@ void Chip8::OP_Dxyn(uint8_t x, uint8_t y, uint8_t n) {
     window.update(display);
 }
 
+/**
+ * Skip if key is pressed
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Ex9E(uint8_t x) {
-    
+    if (keys[registers[x]]) {
+        pc += 2;
+    }
 }
 
+/**
+ * Skip if key is not pressed
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_ExA1(uint8_t x) {
-    
+    if (!keys[registers[x]]) {
+        pc += 2;
+    }
 }
 
 void Chip8::OP_Fx07(uint8_t x) {
@@ -715,7 +729,7 @@ int main(int argc, char* argv[]) {
         }
 
         if (arg == "--scale" && i + 1 < argc) {
-            scale = int(argv[++i] - '0');
+            scale = int(atoi(argv[++i]) - '0');
         }
     }
 
@@ -723,11 +737,11 @@ int main(int argc, char* argv[]) {
     chip8.loadRom("../roms/IBM Logo.ch8");
     chip8.loadFonts();
 
-    size_t i = 0;
-    while (true) {
+    bool quit = false;
+    while (!quit) {
+        quit = chip8.window.processInput(chip8.keys);
         chip8.cycle();
         chip8.updateTimers();
-        i++;
     }
 
     sleep(30);
