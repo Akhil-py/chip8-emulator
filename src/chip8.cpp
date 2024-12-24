@@ -526,8 +526,13 @@ void Chip8::OP_Fx18(uint8_t x) {
     soundTimer = registers[x];
 }
 
+/**
+ * Add Vx to I
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx1E(uint8_t x) {
-    
+    I += registers[x];
 }
 
 void Chip8::OP_Fx29(uint8_t x) {
