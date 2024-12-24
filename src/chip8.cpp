@@ -418,7 +418,7 @@ void Chip8::OP_Bnnn(uint16_t nnn) {
 }
 
 /**
- * Set Vx to a random number AND kk
+ * RSet Vx to a random number AND kk
  * 
  * @param x - Register Vx
  * @param kk - Value to AND with
