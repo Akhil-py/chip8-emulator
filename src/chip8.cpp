@@ -170,8 +170,13 @@ void Chip8::OP_00EE() {
     stack[sp] = 0;
 }
 
+/**
+ * Execute machine language routine
+ * 
+ * NOTE: THIS FUNCTION IS NOT IMPLEMENTED IN MODERN INTERPRETERS
+ */
 void Chip8::OP_0nnn(uint16_t nnn) {
-    
+    // Do nothing
 }
 
 /**
@@ -194,6 +199,12 @@ void Chip8::OP_2nnn(uint16_t nnn) {
     pc = nnn;
 }
 
+/**
+ * Skip if equal
+ * 
+ * @param x - Register Vx
+ * @param kk - Value to compare Vx to
+ */
 void Chip8::OP_3xkk(uint8_t x, uint8_t kk) {
     
 }
