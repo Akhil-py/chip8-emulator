@@ -559,8 +559,15 @@ void Chip8::OP_Fx29(uint8_t x) {
     I = FONT_ADDRESS + (character * 5);
 }
 
+/**
+ * Store the BCD representation of Vx in memory locations I, I+1, and I+2
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx33(uint8_t x) {
-    
+    memory[I] = x / 100;
+    memory[I+1] = (x / 10) % 10;
+    memory[I+2] = x % 10;
 }
 
 void Chip8::OP_Fx55(uint8_t x) {
