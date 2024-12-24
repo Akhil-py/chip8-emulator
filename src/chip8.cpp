@@ -26,9 +26,11 @@ class Chip8 {
         uint8_t registers[16]{}; // v0-vF
         size_t keys[16]{}; // Chip 8's input keys: 1 - 0xF 
         Window window;
+        int SCALE;
+        int CP_SHIFT;
 
         /* Initializations and utility functions */
-        Chip8();
+        Chip8(int scale, bool cp_shift);
         void loadRom(string ROM);
         void loadFonts();
         void updateTimers();
@@ -75,8 +77,10 @@ class Chip8 {
 /**
  * Constructor
  */
-Chip8::Chip8() : window(WIDTH, HEIGHT, 20) {
+Chip8::Chip8(int scale, bool cp_shift) : window(WIDTH, HEIGHT, 20) {
     pc = START_ADDRESS;
+    SCALE = scale;
+    CP_SHIFT = cp_shift;
 }
 
 
@@ -327,8 +331,19 @@ void Chip8::OP_8xy5(uint8_t x, uint8_t y) {
     registers[x] -= registers[y];
 }
 
+/**
+ * Shift right - Shift the value of Vx right by 1 and set VF as appropriate
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ * @property CP_SHIFT - If true, set Vx to Vy
+ */
 void Chip8::OP_8xy6(uint8_t x, uint8_t y) {
-    
+    if (CP_SHIFT) {
+        registers[x] = registers[y];
+    }
+    registers[0xF] = registers[x] & 0x1;
+    registers[x] >>= 1;
 }
 
 /**
@@ -347,8 +362,19 @@ void Chip8::OP_8xy7(uint8_t x, uint8_t y) {
     registers[x] = registers[y] - registers[x];
 }
 
+/**
+ * Shift left - Shift the value of Vx left by 1 and set VF as appropriate
+ * 
+ * @param x - Register Vx
+ * @param y - Register Vy
+ * @property CP_SHIFT - If true, set Vx to Vy
+ */
 void Chip8::OP_8xyE(uint8_t x, uint8_t y) {
-    
+    if (CP_SHIFT) {
+        registers[x] = registers[y];
+    }
+    registers[x] & 0x80 ? registers[0xF] = 1 : registers[0xF] = 0;
+    registers[x] <<= 1;
 }
 
 /**
@@ -648,9 +674,25 @@ void Chip8::cycle() {
     }
 }
 
-int main() {
-    cout << "Starting" << endl;
-    Chip8 chip8 = Chip8();
+int main(int argc, char* argv[]) {
+    cout << "Starting..." << endl;
+
+    bool cp_shift = false;
+    int scale = 20;
+    
+    for (int i = 0; i < argc; i++) {
+        string arg = argv[i];
+
+        if (arg == "--cp_shift") {
+            cp_shift = true;
+        }
+
+        if (arg == "--scale" && i + 1 < argc) {
+            scale = int(argv[++i] - '0');
+        }
+    }
+
+    Chip8 chip8 = Chip8(scale, cp_shift);
     chip8.loadRom("../roms/IBM Logo.ch8");
     chip8.loadFonts();
 
