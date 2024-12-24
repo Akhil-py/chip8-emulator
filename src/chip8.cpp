@@ -495,20 +495,35 @@ void Chip8::OP_ExA1(uint8_t x) {
     }
 }
 
+/**
+ * Load the delay timer into Vx
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx07(uint8_t x) {
-    
+    registers[x] = delayTimer;
 }
 
 void Chip8::OP_Fx0A(uint8_t x) {
     
 }
 
+/**
+ * Load Vx into the delay timer
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx15(uint8_t x) {
-    
+    delayTimer = registers[x];
 }
 
+/**
+ * Load Vx into the sound timer
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx18(uint8_t x) {
-    
+    soundTimer = registers[x];
 }
 
 void Chip8::OP_Fx1E(uint8_t x) {
