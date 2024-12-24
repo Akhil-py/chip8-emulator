@@ -504,8 +504,22 @@ void Chip8::OP_Fx07(uint8_t x) {
     registers[x] = delayTimer;
 }
 
+/**
+ * Wait for a key press and store the result in Vx
+ * 
+ * @param x - Register Vx
+ */
 void Chip8::OP_Fx0A(uint8_t x) {
-    
+    bool pressed = false;
+    for (size_t i : keys) {
+        if (keys[i]) {
+            pressed = true;
+            registers[x] = i;
+        }
+    }
+    if (!pressed) {
+        pc--;
+    }
 }
 
 /**
